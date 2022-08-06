@@ -1,5 +1,36 @@
-let computerSelection = getComputerSelection();
-let playerSelection = getPlayerSelection();
+//Function for playing a five round game of rock, paper, scissors with the computer
+function game(){
+    let computerSelection = "";
+    let playerSelection = "";
+    let playerScore = 0;
+    let computerScore = 0;
+
+    for(let i = 0; i < 5; i++){ //For loop ensures each game will have 5 rounds
+        console.group(`Round ${i + 1}`); //create a console log group for each round to neatly seperate printed results
+        computerSelection = getComputerSelection(); //call the getComputerSelection function to get the computer's choice
+        playerSelection = getPlayerSelection(); //call the getPlayerSelection function to get the player's choice
+        let result = playRound(computerSelection, playerSelection); //call the playRound function to play the round, result is returned as a string
+        switch (result){ //switch case increments the appropriate score variable based on the result string
+            case "win":
+                playerScore++;
+                break;
+            case "lose":
+                computerScore++;
+            case "draw": // if there's a draw, nothing increments
+                break;
+        }
+        console.log(`The score is now: Player ${playerScore} - Computer ${computerScore}`); //print current score to console
+        console.groupEnd(`Round ${i + 1}`); //end the console log group so that when the loop occurs a new group will be created seperately
+    }
+
+    if (playerScore > computerScore){ //If statement determines, based on score variables, who the winner is and prints result to console
+        console.log(`Winner: Player`);
+    } else if (playerScore < computerScore){
+        console.log("Winner: Computer");
+    } else {
+        console.log("It's a draw!");
+    }
+}
 
 //Function for randomly generating the computer's selection of rock, paper, or scissors
 function getComputerSelection(){
