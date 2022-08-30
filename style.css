@@ -1,0 +1,24 @@
+.title-container{
+    display:flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+.rps-title{
+    height:162px;
+    width: 415px;
+}
+
+.icon-container{
+    display:flex;
+    justify-content: center;
+}
+
+.rps-icon{
+    height: 200px;
+    width: 200px;
+}
+
+.rps-icon:hover{
+    height:250px;
+    width:250px;
+}
