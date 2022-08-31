@@ -1,35 +1,36 @@
-//Function for playing a five round game of rock, paper, scissors with the computer
-function game(){
-    let computerSelection = "";
-    let playerSelection = "";
-    let playerScore = 0;
-    let computerScore = 0;
+const rpsIcons = document.querySelectorAll('.rps-icon');
+rpsIcons.forEach((rpsIcon) => {
+    rpsIcon.addEventListener('click', handleRPSClick);
+});
 
-    for(let i = 0; i < 5; i++){ //For loop ensures each game will have 5 rounds
-        console.group(`Round ${i + 1}`); //create a console log group for each round to neatly seperate printed results
-        computerSelection = getComputerSelection(); //call the getComputerSelection function to get the computer's choice
-        playerSelection = getPlayerSelection(); //call the getPlayerSelection function to get the player's choice
-        let result = playRound(computerSelection, playerSelection); //call the playRound function to play the round, result is returned as a string
-        switch (result){ //switch case increments the appropriate score variable based on the result string
-            case "win":
-                playerScore++;
-                break;
-            case "lose":
-                computerScore++;
-            case "draw": // if there's a draw, nothing increments
-                break;
-        }
-        console.log(`The score is now: Player ${playerScore} - Computer ${computerScore}`); //print current score to console
-        console.groupEnd(`Round ${i + 1}`); //end the console log group so that when the loop occurs a new group will be created seperately
-    }
+function handleRPSClick(e){
+    const roundElement = document.querySelector('.roundNumber');
+    const roundNum = parseInt(roundElement.textContent);
+    const playerScore = document.querySelector('.playerScore');
+    const comScore = document.querySelector('.comScore');
 
-    if (playerScore > computerScore){ //If statement determines, based on score variables, who the winner is and prints result to console
-        console.log(`Winner: Player`);
-    } else if (playerScore < computerScore){
-        console.log("Winner: Computer");
-    } else {
-        console.log("It's a draw!");
-    }
+    if(roundNum <= 5){
+        const result = playRound(getComputerSelection(), e.currentTarget.alt);
+        switch (result) {
+            case 'lose':
+                comScore.textContent = 1 + parseInt(comScore.textContent);
+                break;
+
+            case 'win':
+                playerScore.textContent = 1 + parseInt(playerScore.textContent);
+                break;
+            case 'draw':
+                break;
+        };
+        if (roundNum <= 4){
+            roundElement.textContent = roundNum + 1;
+        }else{
+            displayResults(parseInt(playerScore.textContent), parseInt(comScore.textContent));
+            rpsIcons.forEach((rpsIcon) => {
+                rpsIcon.removeEventListener('click', handleRPSClick);
+            });
+        };
+    };
 }
 
 //Function for randomly generating the computer's selection of rock, paper, or scissors
@@ -48,56 +49,39 @@ function getComputerSelection(){
     }
 }
 
-//Function for getting the player's selection of rock, paper, or scissors
-function getPlayerSelection(){
-    let invalidResponse = true;
-    let playerSelection = "";
-
-    while (invalidResponse) { //While loop loops over the following code until the user enters rock, paper, or scissors and nothing else
-        playerSelection = prompt("Enter your selection: Rock, Paper, or Scissors").toLowerCase();
-        if (playerSelection === "rock" || playerSelection === "paper" || playerSelection === "scissors"){ //Checks if user entered rock or paper or scissors
-            invalidResponse = false; //makes invalidResponse false and breaks the loop
-        } else {
-            alert("Invalid entry. Please only enter Rock, Paper, or Scissors"); //alert the user about invalid input so they know why they need to enter again
-        }
-    }
-
-    return playerSelection;
-}
-
 //Function for playing 1 round of Rock Paper Scissors
 function playRound(computerSelection, playerSelection){
-    //Canned responses are setup so that win, lose, and draw responses only need to be written once and can be changed easily
+
     const winResponse = `You win! ${playerSelection} beats ${computerSelection}`;
-    const loseReponse = `You lose. ${playerSelection} beats ${computerSelection}`;
+    const loseReponse = `You lose. ${computerSelection} beats ${playerSelection}`;
     const drawReponse = `Draw! ${playerSelection} matches ${computerSelection}`;
+
+    const gameStatus = document.querySelector('.gameStatus');
     
-    //Nested switch cases determine the end result based on what the computer chose and what the player chose
-    //Corresponding canned response is printed to console and a value is returned that can be used to do score keeping logic
     switch (computerSelection){
         case "rock":
             switch (playerSelection){
                 case "rock":
-                    console.log(drawReponse);
+                    gameStatus.textContent = drawReponse;
                     return "draw";
                 case "paper":
-                    console.log(winResponse);
+                    gameStatus.textContent = winResponse;
                     return "win";
                 case "scissors":
-                    console.log(loseReponse);
+                    gameStatus.textContent = loseReponse;
                     return "lose";
             }
             break;
         case "paper":
             switch (playerSelection){
                 case "rock":
-                    console.log(loseReponse);
+                    gameStatus.textContent = loseReponse;
                     return "lose";
                 case "paper":
-                    console.log(drawReponse);
+                    gameStatus.textContent = drawReponse;
                     return "draw";
                 case "scissors":
-                    console.log(winResponse);
+                    gameStatus.textContent = winResponse;
                     return "win";
 
             }
@@ -105,15 +89,30 @@ function playRound(computerSelection, playerSelection){
         case "scissors":
             switch (playerSelection){
                 case "rock":
-                    console.log(winResponse);
+                    gameStatus.textContent = winResponse;
                     return "win";
                 case "paper":
-                    console.log(loseReponse);
+                    gameStatus.textContent = loseReponse;
                     return "lose";
                 case "scissors":
-                    console.log(drawReponse);
+                    gameStatus.textContent = drawReponse;
                     return "draw";    
             }
         break;
     }
+}
+
+//Function for displaying the final results
+function displayResults(playerScore, comScore){
+    const resultsDiv = document.querySelector('.results');
+    const resultP = document.createElement('p');
+    if(playerScore > comScore){
+        resultP.textContent = "You Win!";
+    } else if(playerScore < comScore){
+        resultP.textContent = "You Lose.";
+    } else {
+        resultP.textContent = "Draw.";
+    }
+    resultP.classList.add('resultP');
+    resultsDiv.appendChild(resultP);
 }

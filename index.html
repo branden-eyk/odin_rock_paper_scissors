@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors!</title>
-    <script src="./script.js"></script>
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -17,6 +16,31 @@
         <img class="rps-icon" src="./images/paper.png" alt="paper">
         <img class="rps-icon" src="./images/scissors.png" alt="scissors">
     </div>
-    <div class="results"></div>
+    <div class="results">
+        <p class="gameStatus">Choose which hand to play!</p>
+        <div class="roundContainer">
+            <p>Round: </p>
+            <p class="roundNumber">1</p>
+            <p>/5</p>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Player</th>
+                    <th>Computer</th>
+                </tr>
+                <tr>
+                    <td class="playerScore">0</td>
+                    <td class="comScore">0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="./script.js"></script>
 </body>
 </html>
